@@ -1,19 +1,31 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 
 import Navbar from "../../components/Navbar";
 import Events from "../../components/Events";
-import useEventsData from "../../hooks/useEventsData";
+//import useEventsData from "../../hooks/useEventsData";
 import ReactPaginate from "react-paginate";
 import styles from './Home.module.css';
+import useEventsResults from "../../state/events-results";
+
+
+
 
 const Home = () => {
-    const { events,isLoading, error, fetchEvents, page } = useEventsData();
+
+    const { data,isLoading, error, fetchEvents } = useEventsResults();
+    const events = useMemo (() => data?._embedded?.events || [], [data?._embedded?.events]);
+    const page = useMemo (() => data?.page || {}, [data?.page]);
     const [searchTerm, setSearchTerm] = useState('');
     const containerRef = useRef();
 
-    useEffect(()=> {
-        fetchEvents();
 
+    //const fecthMyEvents = () => fetchEvents();
+    const fetchMyEventsRef = useRef();
+
+    fetchMyEventsRef.current = fetchEvents;
+
+    useEffect(()=> {
+        fetchMyEventsRef.current();
     }, []); 
 
     const handleNavbarSearch = (term) => {
@@ -21,10 +33,10 @@ const Home = () => {
         setSearchTerm(term);
         fetchEvents(`&keyword=${term}`);
     };
-    const handlePageClick = ({ selected }) => {
+    const handlePageClick = useCallback (({ selected }) => {
         fetchEvents (`&keyword=${searchTerm}&page=${selected}`);
 
-    };
+    }, [searchTerm, fetchEvents]);
 
 
     const renderEvents = () => {

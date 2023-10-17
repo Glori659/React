@@ -1,7 +1,6 @@
 import useEventsResults from '../state/events-results';
-{/*app.use(cors({
-    origin: 'http://localhost:5173'
-}));*/}
+
+//hook para hacer una llamada a la api y guardarlo en tu estado local
 
 const useEventsData = () => {
     const {data,isLoading,error,fetchEvents} = useEventsResults();

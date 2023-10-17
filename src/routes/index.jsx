@@ -3,11 +3,16 @@ import {
     RouterProvider,
 } from "react-router-dom";
 
+import { Suspense } from "react";
+
 import Home from "../views/Home";
 import Detail from "../views/Detail";
 import Error404 from "../views/Error404";
+import ErrorBoundary from '../components/ErrorBoundary';
 import Profile from "../views/Profile";
 import { Children } from "react";
+import LikedEvents from "../views/Profile/components/LikedEvents";
+import MyInfo from "../views/Profile/components/MyInfo";
 
 
 const router = createBrowserRouter([   
@@ -18,7 +23,12 @@ const router = createBrowserRouter([
     },
     {
         path: '/detail/:eventId',
-        element: <Detail/>
+        element: (
+            <Suspense fallback={<div>CargandO </div>}>
+                 <ErrorBoundary fallback={ <div> Ha ocurrido un error al obtener el detalle </div>}/>
+                <Detail/>
+            </Suspense>
+        )
     },
     {
         path: '/profile',
@@ -26,11 +36,11 @@ const router = createBrowserRouter([
         children: [
             { 
                 path:'my-info',
-                element:  <div>My Info</div>
+                element: <MyInfo/>,
 
             }, { 
                 path:'liked-events',
-                element:  <div>Liked events</div>
+                element: <LikedEvents/>,
 
             }
     

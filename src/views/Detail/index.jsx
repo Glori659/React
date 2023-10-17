@@ -1,25 +1,35 @@
-import { useEffect,useState } from "react";
-import { useParams } from "react-router-dom";
+//import { useEffect,useState } from "react";
+//import { useParams } from "react-router-dom";
 import { format } from "date-fns";
 import { es } from "date-fns/locale"
+//import useEventsResults from "../../state/events-results";
+import eventFetcher from '../../utils/fetchEvents';
 
 
 import styles from './Detail.module.css';
 
-console.log(import.meta.env);
+//console.log(import.meta.env);
+
+console.log(window.location);
+
+const pathname = window.location.pathname;
 
 
+
+const resource = eventFetcher(pathname.substring(8,pathname.length));
 
 const Detail = () => {
-
-    const { eventId } = useParams();
-    const [eventData, setEventData] = useState({});
-    const [error, SetError] = useState({});
-    const [isLoading, setIsLoading] = useState(true);
+    //const { data } = useEventsResults();
+    //const { eventId } = useParams();
+    //const [eventData, setEventData] = useState({});
+    const eventData = resource.eventDetail.read();
+    console.log(eventData);
+    //const [error, SetError] = useState({});
+    //const [isLoading, setIsLoading] = useState(true);
  
-   
+   //console.log(data);
 
-    useEffect(() => {
+   /* useEffect(() => {
         const fetchEventData = async () => {
             try {
                 const response = await fetch (`https://app.ticketmaster.com/discovery/v2/events/${eventId}?apikey=${import.meta.env.VITE_TICKETMASTER_API_KEY}`);
@@ -44,9 +54,10 @@ const Detail = () => {
 
     if (Object.keys(error) > 0) {
         return <div> Ha Ocurrido un Error..</div>
-    }
+    }*/
 
     //console.log(eventData);
+
     return (
     
     <div className={styles.container}>

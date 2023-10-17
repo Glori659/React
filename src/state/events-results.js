@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+
+//Store para guardar valores de manera global
 const useEventsResults = create((set) =>({
 data: [],
 error: null,
